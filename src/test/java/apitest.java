@@ -235,7 +235,7 @@ public void setup() {
                 Paths.get("src/test/resources/data.json")
         );
 
-        response=request.post("https://reqres.in/api/users/1",RequestOptions.create()
+        response=request.post("https://reqres.in/api/users",RequestOptions.create()
                 .setData(jsonBody).
                 setHeader("Content-Type", "application/json")
                 .setHeader("x-api-key", "pro_e18802548621c36ab0e58fe3ba7ebbe18638c179787ba21f2b19efe8df375a27")
