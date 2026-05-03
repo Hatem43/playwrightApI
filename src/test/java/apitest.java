@@ -3,7 +3,6 @@ import com.microsoft.playwright.options.RequestOptions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -56,6 +55,9 @@ public void setup() {
         Assert.assertEquals(response.status(),200);
 
 
+        // prints the response body
+        System.out.println("the response Body: " + response.body().toString());
+
         // prints the text representation response body
         System.out.println("the response Body: " + response.text());
 
@@ -81,7 +83,6 @@ public void setup() {
 
     }
 
-
     @Test(priority = 1)
     public void posttest() {
 
@@ -105,6 +106,10 @@ public void setup() {
 
         // prints the response status message
         System.out.println("the response Status: "+ response.statusText());
+
+
+         // prints the response body
+        System.out.println("the response Body: " + response.body().toString());
 
 
         // prints text representation of response of POST request
@@ -149,12 +154,23 @@ public void setup() {
         System.out.println("the response Status code: " + response.status());
 
 
+        // prints the response status message
+        System.out.println("the response Status: "+ response.statusText());
+
+
+        // prints the response body
+        System.out.println("the response Body: " + response.body().toString());
+
+
         // prints text representation for Response body of PUT request
         System.out.println("the response Body: " + response.text());
 
 
         // checks the status code of PUT request
         Assert.assertEquals(response.status(), 200);
+
+        //checks the status text of PUT request
+        Assert.assertEquals(response.statusText(), "OK");
 
 
         // checks the response body after Full update
@@ -186,9 +202,16 @@ public void setup() {
         // prints response status code of PATCH request
         System.out.println("the response Status code: " + response.status());
 
+        // prints response status of PATCH request
+        System.out.println("the response Status : " + response.statusText());
+
 
         // checks the response status of PATCH request
         Assert.assertEquals(response.statusText(),"OK");
+
+
+        // prints the response body
+        System.out.println("the response Body: " + response.body().toString());
 
 
         // prints text representation for Response body of PATCH request
@@ -219,12 +242,25 @@ public void setup() {
         System.out.println("the response Status code: " + response.status());
 
 
+        // prints the response status after DELETE request
+        System.out.println("the response Status: " + response.statusText());
+
+
         // prints the response body after DELETE request
+        System.out.println("the response Body: " + response.body().toString());
+
+
+        // prints the text representation for response body after DELETE request
         System.out.println("the response Body: " + response.text());
 
 
-        // prints the response status after DELETE request
-        System.out.println("the response Status: " + response.statusText());
+        // checks the status code of DELETE request
+        Assert.assertEquals(response.status(),204);
+
+
+        // checks the response status of DELETE request
+        Assert.assertEquals(response.statusText(),"No Content");
+
     }
 
 
@@ -249,6 +285,9 @@ public void setup() {
         // prints the response status
         System.out.println("the response Status: " + response.statusText());
 
+        // prints the response body
+        System.out.println("the response Body: " + response.body().toString());
+
 
         // prints the text representation for response of POST request
         System.out.println("the response Body: " + response.text());
@@ -265,5 +304,6 @@ public void setup() {
         // checks the response after POST request using external data
         Assert.assertTrue(response.text().contains("cairo"));
     }
+
 
 }
