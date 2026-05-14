@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.RequestOptions;
 import org.testng.Assert;
@@ -303,6 +305,12 @@ public void setup() {
 
         // checks the response after POST request using external data
         Assert.assertTrue(response.text().contains("cairo"));
+
+        String responsebody=response.text();
+        ObjectMapper mapper=new ObjectMapper();
+        JsonNode node=mapper.readTree(responsebody);
+        String loc=node.get("location").asText();
+        Assert.assertEquals(loc,"cairo");
     }
 
 
