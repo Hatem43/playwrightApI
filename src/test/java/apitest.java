@@ -195,7 +195,7 @@ public void setup() {
         Map<String, String> updatedrequestBody = new HashMap<>();
         updatedrequestBody.put("name", "ziad");
         updatedrequestBody.put("job", "teacher");
-        response=request.put("https://reqres.in/api/users/1",RequestOptions.create().
+        response=request.patch("https://reqres.in/api/users/1",RequestOptions.create().
                 setData(updatedrequestBody).
                 setHeader("Content-Type", "application/json")
                 .setHeader("x-api-key","pro_e18802548621c36ab0e58fe3ba7ebbe18638c179787ba21f2b19efe8df375a27")
