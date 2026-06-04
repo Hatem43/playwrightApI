@@ -22,7 +22,7 @@ public class apitest {
     public Page page;
     public BrowserContext context;
     public APIResponse response;
-    APIRequestContext request;
+    public APIRequestContext request;
 
 
 @BeforeMethod
@@ -290,11 +290,10 @@ public void setup() {
     @Test(priority = 5)
     public void posttestexternaldata() throws IOException {
 
-        ObjectMapper mapper=new ObjectMapper();
-        JsonNode node=mapper.readTree(new File("src/test/resources/data.json"));
+        String requestBody = Files.readString(Paths.get("src/test/resources/data.json"));
 
         response=request.post("https://reqres.in/api/users",RequestOptions.create()
-                .setData(node).
+                .setData(requestBody).
                 setHeader("Content-Type", "application/json")
                 .setHeader("x-api-key", "pro_e18802548621c36ab0e58fe3ba7ebbe18638c179787ba21f2b19efe8df375a27")
 
@@ -331,6 +330,12 @@ public void setup() {
 
         // checks the response after POST request using external data
         Assert.assertTrue(response.text().contains("cairo"));
+
+
+        ObjectMapper mapper=new ObjectMapper();
+        JsonNode node=mapper.readTree(response.text());
+        String username=node.get("name").asText();
+        Assert.assertEquals(username,"hatem");
 
         // checks the content-type in the response headers and its value
         Assert.assertTrue(response.headers().get("content-type").contains("application/json; charset=utf-8"));

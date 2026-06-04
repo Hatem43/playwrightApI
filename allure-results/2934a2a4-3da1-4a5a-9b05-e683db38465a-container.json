@@ -1,1 +1,0 @@
-{"uuid":"2934a2a4-3da1-4a5a-9b05-e683db38465a","name":"apitest.setup","children":["99a23cc0-2e4e-4c1e-8d95-0c4444ce7a21"],"description":"","befores":[{"name":"setup","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1780594625150,"stop":1780594627410}],"afters":[],"start":1780594625150,"stop":1780594627410}
