@@ -5,6 +5,8 @@ import com.microsoft.playwright.options.RequestOptions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -167,6 +169,13 @@ public void setup() {
         // prints text representation for Response body of PUT request
         System.out.println("the response Body: " + response.text());
 
+        // prints the response headers
+        System.out.println("the response Headers: "+ response.headers());
+
+
+        // prints the value of content-type
+        System.out.println("the content-type: "+ response.headers().get("content-type"));
+
 
         // checks the status code of PUT request
         Assert.assertEquals(response.status(), 200);
@@ -220,6 +229,14 @@ public void setup() {
         System.out.println("the response Body: " + response.text());
 
 
+        // prints the response headers
+        System.out.println("the response Headers: "+ response.headers());
+
+
+        // prints the value of content-type
+        System.out.println("the content-type: "+ response.headers().get("content-type"));
+
+
         // checks the status code of PATCH request
         Assert.assertEquals(response.status(), 200);
 
@@ -256,6 +273,10 @@ public void setup() {
         System.out.println("the response Body: " + response.text());
 
 
+        // prints the response headers
+        System.out.println("the response Headers: "+ response.headers());
+
+
         // checks the status code of DELETE request
         Assert.assertEquals(response.status(),204);
 
@@ -269,12 +290,11 @@ public void setup() {
     @Test(priority = 5)
     public void posttestexternaldata() throws IOException {
 
-        String jsonBody = Files.readString(
-                Paths.get("src/test/resources/data.json")
-        );
+        ObjectMapper mapper=new ObjectMapper();
+        JsonNode node=mapper.readTree(new File("src/test/resources/data.json"));
 
         response=request.post("https://reqres.in/api/users",RequestOptions.create()
-                .setData(jsonBody).
+                .setData(node).
                 setHeader("Content-Type", "application/json")
                 .setHeader("x-api-key", "pro_e18802548621c36ab0e58fe3ba7ebbe18638c179787ba21f2b19efe8df375a27")
 
@@ -294,6 +314,13 @@ public void setup() {
         // prints the text representation for response of POST request
         System.out.println("the response Body: " + response.text());
 
+        // prints the response headers
+        System.out.println("the response Headers: "+ response.headers());
+
+
+        // prints the value of content-type
+        System.out.println("the content-type: "+ response.headers().get("content-type"));
+
 
         // checks the status code of the POST request
         Assert.assertEquals(response.status(), 201);
@@ -302,16 +329,12 @@ public void setup() {
         // checks the status of the POST request
         Assert.assertEquals(response.statusText(), "Created");
 
-
         // checks the response after POST request using external data
         Assert.assertTrue(response.text().contains("cairo"));
 
-        String responsebody=response.text();
-        ObjectMapper mapper=new ObjectMapper();
-        JsonNode node=mapper.readTree(responsebody);
-        String loc=node.get("location").asText();
-        Assert.assertEquals(loc,"cairo");
-    }
+        // checks the content-type in the response headers and its value
+        Assert.assertTrue(response.headers().get("content-type").contains("application/json; charset=utf-8"));
 
+    }
 
 }
