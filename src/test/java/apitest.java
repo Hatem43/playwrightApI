@@ -2,16 +2,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.RequestOptions;
+import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -91,7 +89,7 @@ public void setup() {
     public void posttest() {
 
         // Request payload (body)
-        Map<String, String> requestBody = new HashMap<>();
+        JSONObject requestBody = new JSONObject();
         requestBody.put("name", "Hatem");
         requestBody.put("job", "QA Engineer");
 
@@ -145,12 +143,14 @@ public void setup() {
     @Test(priority = 2)
     public void putest() {
 
-        Map<String, String> updatedrequestBody = new HashMap<>();
+       // updated request body
+        JSONObject updatedrequestBody = new JSONObject();
         updatedrequestBody.put("name", "eslam");
         updatedrequestBody.put("job", "teacher");
+
         response = request.put("https://reqres.in/api/users/1", RequestOptions.create().
-                setData(updatedrequestBody).
-                setHeader("Content-Type", "application/json")
+                setData(updatedrequestBody)
+                .setHeader("Content-Type", "application/json")
                 .setHeader("x-api-key","pro_e18802548621c36ab0e58fe3ba7ebbe18638c179787ba21f2b19efe8df375a27")
         );
 
@@ -201,12 +201,14 @@ public void setup() {
     @Test(priority = 3)
     public void patchtest(){
 
-        Map<String, String> updatedrequestBody = new HashMap<>();
+        // partially  updated request body
+        JSONObject updatedrequestBody = new JSONObject();
         updatedrequestBody.put("name", "ziad");
         updatedrequestBody.put("job", "teacher");
+
         response=request.patch("https://reqres.in/api/users/1",RequestOptions.create().
-                setData(updatedrequestBody).
-                setHeader("Content-Type", "application/json")
+                 setData(updatedrequestBody)
+                .setHeader("Content-Type", "application/json")
                 .setHeader("x-api-key","pro_e18802548621c36ab0e58fe3ba7ebbe18638c179787ba21f2b19efe8df375a27")
         );
 
@@ -252,6 +254,7 @@ public void setup() {
 
     @Test(priority = 4)
     public void deletetest(){
+
         response=request.delete("https://reqres.in/api/users/1",RequestOptions.create().
                  setHeader("x-api-key", "pro_e18802548621c36ab0e58fe3ba7ebbe18638c179787ba21f2b19efe8df375a27")
                 .setHeader("Content-Type", "application/json")
@@ -293,8 +296,8 @@ public void setup() {
         String requestBody = Files.readString(Paths.get("src/test/resources/data.json"));
 
         response=request.post("https://reqres.in/api/users",RequestOptions.create()
-                .setData(requestBody).
-                setHeader("Content-Type", "application/json")
+                .setData(requestBody)
+                .setHeader("Content-Type", "application/json")
                 .setHeader("x-api-key", "pro_e18802548621c36ab0e58fe3ba7ebbe18638c179787ba21f2b19efe8df375a27")
 
         );
@@ -320,6 +323,8 @@ public void setup() {
         // prints the value of content-type
         System.out.println("the content-type: "+ response.headers().get("content-type"));
 
+        // checks the content-type in the response headers and its value
+        Assert.assertTrue(response.headers().get("content-type").contains("application/json; charset=utf-8"));
 
         // checks the status code of the POST request
         Assert.assertEquals(response.status(), 201);
@@ -336,10 +341,6 @@ public void setup() {
         JsonNode node=mapper.readTree(response.text());
         String username=node.get("name").asText();
         Assert.assertEquals(username,"hatem");
-
-        // checks the content-type in the response headers and its value
-        Assert.assertTrue(response.headers().get("content-type").contains("application/json; charset=utf-8"));
-
     }
 
 }
