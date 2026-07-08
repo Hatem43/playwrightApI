@@ -4,6 +4,7 @@ import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.RequestOptions;
 import org.json.JSONObject;
 import org.testng.Assert;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.io.IOException;
@@ -16,9 +17,6 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public class apitest {
 
     public Playwright  playwright;
-    public Browser browser;
-    public Page page;
-    public BrowserContext context;
     public APIResponse response;
     public APIRequestContext request;
 
@@ -26,9 +24,6 @@ public class apitest {
 @BeforeMethod
 public void setup() {
     playwright = Playwright.create();
-    browser=playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-    context=browser.newContext();
-    page=context.newPage();
     request = playwright.request().newContext();
 }
 
@@ -343,4 +338,13 @@ public void setup() {
         Assert.assertEquals(username,"hatem");
     }
 
+    @AfterSuite
+    public void teardown(){
+         if(request!=null){
+             request.dispose();
+         }
+         if(playwright!=null){
+             playwright.close();
+         }
+    }
 }
