@@ -1,13 +1,19 @@
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.RequestOptions;
 import org.json.JSONObject;
 import org.testng.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import utils.ExtentManager;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -19,12 +25,16 @@ public class apitest {
     public Playwright  playwright;
     public APIResponse response;
     public APIRequestContext request;
+    protected ExtentReports extent;
+    protected ExtentTest test;
 
 
 @BeforeMethod
-public void setup() {
+public void setup(Method method) {
     playwright = Playwright.create();
     request = playwright.request().newContext();
+    extent = ExtentManager.getExtent();
+    test = extent.createTest(method.getName());
 }
 
     @Test(priority = 0)
@@ -336,6 +346,20 @@ public void setup() {
         JsonNode node=mapper.readTree(response.text());
         String username=node.get("name").asText();
         Assert.assertEquals(username,"hatem");
+    }
+
+    @AfterMethod
+    public void savetest(ITestResult result){
+
+        if (result.getStatus() == ITestResult.SUCCESS) {
+            test.pass("Test Passed");
+        } else if (result.getStatus() == ITestResult.FAILURE) {
+            test.fail(result.getThrowable());
+        } else {
+            test.skip("Test Skipped");
+        }
+
+        extent.flush();
     }
 
     @AfterSuite
